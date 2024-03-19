@@ -2,32 +2,28 @@
 //throws 用于在方法声明中指示该方法可能抛出的异常类型，告知方法的调用者需要处理这些异常。
 //throw is used to explicitly throw an exception.
 //throws is used in a method signature to declare that a method may throw certain exceptions.
-package yourOwnException;
+// 位于 catchingExceptionHierarchy 包中
+package catchingExceptionHierarchy;
+
+class MyParentException extends Exception { }
+
+class MyChildException extends MyParentException { }
+
+class MyGrandChildException extends MyChildException { }
+
 public class Main {
-
-    public static void f() throws MyException {
-        System.out.println("Throwing MyException from f()");
-        throw new MyException();
-    }
-
-    public static void g() throws MyException {
-        System.out.println("Throwing MyException from g()");
-        throw new MyException("Originated in g()");
-    }
-
     public static void main(String[] args) {
         try {
-            f();
-        } catch (MyException e) {
-            e.printStackTrace();
+            throw new MyGrandChildException();
+        } catch (MyChildException e) {
+            System.err.println("Caught MyChildException");
+        } catch (MyParentException e) {
+            System.err.println("Caught MyParentException");
         }
-        try {
-            g();
-        } catch (MyException e) {
-            e.printStackTrace();
-        }
+        // 尝试更改 catch 块的顺序，将导致编译错误，因为更具体的异常应该先被捕获。
     }
 }
+
 /*The second version
 /*package dividebyzero;
 public class Main {
